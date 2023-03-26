@@ -1,0 +1,8 @@
+[
+    { "title": "id", "name": "Id", "filter": false },
+    { "title": "actions", "name": "Actions", "filter": false },
+    { "title": "project", "name": "Project", "filter": true },
+    { "title": "manager", "name": "Manager", "filter": true },
+    { "title": "company", "name": "Company", "filter": true },
+    { "title": "updatedAt", "name": "Updated At", "filter": true }
+  ]

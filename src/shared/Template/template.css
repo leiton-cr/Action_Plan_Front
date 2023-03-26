@@ -1,0 +1,14 @@
+.template_header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1em;
+}
+
+.template_image{
+    width: 75px;
+}
+
+.template_title{
+    display: inline-block;
+}

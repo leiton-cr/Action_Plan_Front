@@ -1,0 +1,15 @@
+[
+    { "title": "id", "name": "Id", "filter": false}, 
+    { "title": "action", "name": "Action", "filter": false},
+    { "title": "task", "name": "Task", "filter": true},
+    { "title": "responsible", "name": "Responsible", "filter": true},
+    { "title": "priority", "name": "Priority", "filter": true},
+    { "title": "status", "name": "Status", "filter": true},
+    { "title": "start", "name": "Start", "filter": true},
+    { "title": "end", "name": "End", "filter": true},
+    { "title": "resources", "name": "Required resources", "filter": true},
+    { "title": "bloquers", "name": "Potential blockers", "filter": true},
+    { "title": "stakeholder", "name": "Stakeholder", "filter": true},
+    { "title": "milestone", "name": "Milestone", "filter": true},
+    { "title": "notes", "name": "Notes", "filter": true}
+]
