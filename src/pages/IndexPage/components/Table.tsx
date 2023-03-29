@@ -16,9 +16,9 @@ interface Props {
     filters?: boolean
 }
 
-const Table = ({ headerData, mockData, filters }: Props) => {
+const Table = ({ headerData, filters }: Props) => {
 
-    const { tableData, changeOrderer, changeFilterer, handleAction } = useTable(mockData);
+    const { tableData, changeOrderer, changeFilterer, handleAction } = useTable();
 
     const actions: Array<TableActions> = [
         {

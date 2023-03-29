@@ -5,7 +5,6 @@ interface Props{
     actions?: Array<TableActions>,
 }
 
-
 const ActionSelect = ({ id, actions }:Props) => {
 
     const handleClick = (e) => {

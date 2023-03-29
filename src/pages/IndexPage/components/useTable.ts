@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MainColumnNames } from "./MainColumnNames";
 import { PlanModel } from "../../../models/PlanModel";
-import { PlanDetail } from "../../../models/PlanDetail";
 import useAlerts from "../../../hooks/useAlerts";
 import { useNavigate } from "react-router-dom";
+import usePlanService from "../../../services/usePlanService";
 
-const useTable = (mockData: Array<PlanModel | PlanDetail>) => {
+const useTable = () => {
 
-    const {promiseAlert} = useAlerts()
-   
+    const { promiseAlert } = useAlerts()
+
     const [activeOrderer, setActiveOrderer] = useState({ orderer: "id", isAsc: false });
-    const [tableData, setTableData] = useState(mockData)
+    const [tableData, setTableData] = useState([])
     const [filters, setFilters] = useState({
         project: "",
         manager: "",
@@ -19,6 +19,7 @@ const useTable = (mockData: Array<PlanModel | PlanDetail>) => {
     })
 
     const navigate = useNavigate()
+    const mockData = useRef([])
 
     const changeOrderer = (orderer: string, isAsc: boolean) => {
 
@@ -51,34 +52,39 @@ const useTable = (mockData: Array<PlanModel | PlanDetail>) => {
     }
 
     const handleEdit = (id: string) => {
-       navigate(`/edit/${id}`)
+        navigate(`/edit/${id}`)
     }
 
 
     const handleDelete = (id: string) => {
         promiseAlert("Are you sure?", "This action is irreversible.")
-        .then(({isConfirmed} )=>{
+            .then(({ isConfirmed }) => {
 
-            if(isConfirmed){
-                processDelete(id);
-            }
-
-        })
-
-
-       
+                if (isConfirmed) {
+                    processDelete(id);
+                }
+            })
     }
 
     const processDelete = (id) => {
         let newStates = tableData
-        newStates = newStates.filter(state => state.id !== id)
+        newStates = newStates.filter((state: PlanModel) => state.id !== id)
 
         setTableData([...newStates])
     }
 
+    const { getAll } = usePlanService()
+
+    useEffect(() => {
+        getAll().then((res) => {
+            mockData.current = res.data
+            setTableData(res.data)
+        })
+    }, [])
+
     useEffect(() => {
 
-        let filteredTable = JSON.parse(JSON.stringify(mockData))
+        let filteredTable = JSON.parse(JSON.stringify(mockData.current))
 
         filteredTable = filteredTable.sort((a: { [x: string]: string; }, b: { [x: string]: string; }) => {
             let textA = a[activeOrderer.orderer].toUpperCase();
@@ -105,10 +111,13 @@ const useTable = (mockData: Array<PlanModel | PlanDetail>) => {
 
         })
 
-
         setTableData(filteredTable)
 
     }, [activeOrderer, filters])
+
+    useEffect(() => {
+        setTableData(mockData.current)
+    }, [mockData])
 
 
     return { tableData, changeOrderer, changeFilterer, handleAction }

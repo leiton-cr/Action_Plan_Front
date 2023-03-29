@@ -1,19 +1,25 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
 import useAlerts from "../../hooks/useAlerts";
 import { PlanDetail } from "../../models/PlanDetail";
+import usePlanService from "../../services/usePlanService";
 
 import FieldInfo from "../../shared/Tables/Interfaces/FieldInfo";
-import { createEmptyLine, emptyHeader } from "../../utils/helpers"
+import { EMPTY_HEADER } from "../../utils/constants";
+import { createEmptyLine, parseDate } from "../../utils/helpers"
 
 import HeaderData from './HeaderData.json'
 
 const useDetails = () => {
-
   let { id } = useParams();
-  let { promiseAlert, toastAlert } = useAlerts();
   let navigate = useNavigate();
+
+  let { getOne } = usePlanService();
+  let { promiseAlert, toastAlert } = useAlerts();
+
   const [changes, setChanges] = useState(false)
+
+  const editable = useRef(null)
 
   let transactionType = "create"
 
@@ -30,26 +36,15 @@ const useDetails = () => {
   }
 
   let details: Array<PlanDetail> = [];
-  let header = JSON.parse(JSON.stringify(emptyHeader))
-
-
-  if (isEdit()) {
-
-  }
-
-
-
 
   if (details.length === 0) {
     details.push(createEmptyLine())
   }
 
   const [tableData, setTableData] = useState(details)
-  const [formData, setformData] = useState(header)
+  const [formData, setformData] = useState(JSON.parse(JSON.stringify(EMPTY_HEADER)))
 
   const handleSave = () => {
-    console.table(tableData);
-    console.table(formData);
 
     if (!changes) {
       return toastAlert("No changes to save", "warning")
@@ -78,15 +73,26 @@ const useDetails = () => {
   }
 
   const hasEditHeaderChanges = () => {
-    return JSON.stringify(header) != JSON.stringify(details)
+    if (editable.current && "plan" in editable.current){
+      return JSON.stringify((editable.current as any).plan) != JSON.stringify(formData)
+    }
+
+    return false
   }
 
   const hasEditTableChanges = () => {
-    return JSON.stringify(tableData) != JSON.stringify(tableData)
+    if (editable.current && "details" in editable.current){
+
+      return  JSON.stringify(tableData.slice(0, tableData.length-1)) != 
+              JSON.stringify((editable.current as any).details.slice(0, (editable.current as any).details.length-1))
+    }
+      
+    return false
   }
 
+
   const hasCreateHeaderChanges = () => {
-    return JSON.stringify(emptyHeader) != JSON.stringify(formData)
+    return JSON.stringify(EMPTY_HEADER) != JSON.stringify(formData)
   }
 
   const hasCreateTableChanges = () => {
@@ -109,6 +115,31 @@ const useDetails = () => {
   useEffect(() => {
     hasChanges();
   }, [tableData, formData])
+
+  useEffect(() => {
+    if (isEdit()) {
+      getOne(id).then(element => {
+
+        if (!(element.data.plan) || !(element.data.details)  ){
+          navigate("/")
+          return toastAlert(`Id not found: [${id}]`, "error");
+        }
+        
+        element.data.details = element.data.details.map(detail => {
+          detail.start = parseDate(detail.start)
+          detail.end = parseDate(detail.end)
+          return detail
+        });
+        
+        element.data.details.push(createEmptyLine())
+
+        editable.current = JSON.parse(JSON.stringify(element.data))
+
+        setTableData(element.data.details)
+        setformData(element.data.plan)
+      });
+    }
+  }, [])
 
   return { changes, handleSave, handleCancel, headerData, detailsState: [tableData, setTableData], formState: [formData, setformData] }
 }

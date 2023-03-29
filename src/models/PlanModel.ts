@@ -1,8 +1,8 @@
 export interface PlanModel {
     id: string
     project: string
-    manager: string
-    company: string
+    manager: number | string
+    company: number | string
     outcome?: string
     goal?: string
     issue?: string

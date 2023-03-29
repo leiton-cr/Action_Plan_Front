@@ -1,6 +1,7 @@
 
 import useAlerts from "../../../../hooks/useAlerts";
-import { createEmptyLine, emptyLine } from "../../../../utils/helpers";
+import { EMPTY_DETAIL } from "../../../../utils/constants";
+import { createEmptyLine } from "../../../../utils/helpers";
 
 
 const useTable = (detailsState) => {
@@ -37,12 +38,14 @@ const useTable = (detailsState) => {
     const handleField = (e) => {
         const id = e.currentTarget.closest(".table_body__row").id
         const field = e.currentTarget.dataset.title
-        const value = e.currentTarget.value
+        let value = e.currentTarget.value
 
-        if (value === " ") return
-
-        if (!id) {
+        if (value === " " || !id) {
             return
+        }
+      
+        if (field == "responsible" || field == "priority" || field == "status" || field == "stakeholder"){
+            value = parseInt(value)
         }
 
         let newStates = tableData
@@ -64,7 +67,7 @@ const useTable = (detailsState) => {
     const removeEmptiedLine = (newStates, id: string) => {
         return newStates.filter(data => {
             if (data.id == id) {
-                return !(JSON.stringify({ ...data, id: "" }) === JSON.stringify(emptyLine))
+                return !(JSON.stringify({ ...data, id: "" }) === JSON.stringify(EMPTY_DETAIL))
             } else {
                 return true
             }
@@ -75,7 +78,7 @@ const useTable = (detailsState) => {
         let emptyLines = 0;
 
         newStates.map(data => {
-            if (JSON.stringify({ ...data, id: "" }) === JSON.stringify(emptyLine)) {
+            if (JSON.stringify({ ...data, id: "" }) === JSON.stringify(EMPTY_DETAIL)) {
                 emptyLines++
             }
         })

@@ -1,14 +1,14 @@
 export interface PlanDetail{
     id: string
     task: string
-    responsible: string
-    priority: string
-    status: string
+    responsible: number | string
+    priority: number | string
+    status: number | string
     start: string
     end: string
     resources: string
-    bloquers: string
-    stakeholder: string
+    blockers: string
+    stakeholder: number | string
     milestone: string
     notes: string
 }

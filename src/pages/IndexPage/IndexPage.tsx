@@ -1,6 +1,7 @@
 
 
 import { PlanModel } from '../../models/PlanModel'
+import usePlanService from '../../services/usePlanService'
 import FieldInfo from '../../shared/Tables/Interfaces/FieldInfo'
 import Table from './components/Table'
 
@@ -10,34 +11,14 @@ const IndexPage = () => {
 
   const headerData: Array<FieldInfo> = HeaderData
 
-  const tableData: Array<PlanModel> = [
-    {
-      id: "1",
-      project: "DC Changer",
-      manager: "Jhon",
-      company: "Pizza Hut",
-      updatedAt: "13/3/2022",
-    },
-    {
-      id: "2",
-      project: "Power Ranger",
-      manager: "Adams",
-      company: "Papa Jhons",
-      updatedAt: "12/3/2022",
-    },
-    {
-      id: "3",
-      project: "Other",
-      manager: "Zdams",
-      company: "Papa Jhons",
-      updatedAt: "12/3/2022",
-    }
-  ]
+  const tableData: Array<PlanModel> = []
+
+
+
 
   return (
     <div>
      
-
       <Table headerData={headerData} mockData={tableData} filters={true}></Table>
 
     </div>

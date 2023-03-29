@@ -8,7 +8,7 @@
     { "title": "start", "name": "Start", "filter": true},
     { "title": "end", "name": "End", "filter": true},
     { "title": "resources", "name": "Required resources", "filter": true},
-    { "title": "bloquers", "name": "Potential blockers", "filter": true},
+    { "title": "blockers", "name": "Potential blockers", "filter": true},
     { "title": "stakeholder", "name": "Stakeholder", "filter": true},
     { "title": "milestone", "name": "Milestone", "filter": true},
     { "title": "notes", "name": "Notes", "filter": true}

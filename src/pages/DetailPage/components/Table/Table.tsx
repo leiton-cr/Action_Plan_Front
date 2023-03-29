@@ -3,7 +3,6 @@
 import useTable from "./useTable";
 
 import "./table.css"
-import { PlanDetail } from "../../../../models/PlanDetail";
 import { TableActions } from "../../../../models/TableActions";
 import TableHeader from "../../../../shared/TableHeader/TableHeader";
 import TableBody from "../../../../shared/TableBody/TableBody";
@@ -32,9 +31,7 @@ const Table = ({ headerData, detailsState = [], filters }: Props) => {
       <div className="table__count">Your plan currently have: <span>{tableData.length}</span> item{tableData.length !== 1 && "s"}</div>
       <section className='table__container details'>
         <div className="table table_plan" id="tablePlan">
-
           <TableHeader headerData={headerData} />
-
           <TableBody handler={handleField} tableData={tableData} actions={actions} />
         </div>
       </section>
