@@ -1,26 +1,18 @@
-
-
-import { PlanModel } from '../../models/PlanModel'
-import usePlanService from '../../services/usePlanService'
-import FieldInfo from '../../shared/Tables/Interfaces/FieldInfo'
+import { Link } from 'react-router-dom'
 import Table from './components/Table'
-
-import HeaderData from './HeaderData.json'
+import { useState } from 'react'
 
 const IndexPage = () => {
 
-  const headerData: Array<FieldInfo> = HeaderData
-
-  const tableData: Array<PlanModel> = []
-
-
-
+  const [count, setCount] = useState(0)
 
   return (
     <div>
-     
-      <Table headerData={headerData} mockData={tableData} filters={true}></Table>
-
+      <div className="index__heading">
+        <button><Link to={"/create"}>Create Plan</Link></button>
+        <div className="table__count">Currently showing: <span>{count}</span> plan{count !== 1 && "s"}</div>
+      </div>
+      <Table setCount={setCount}></Table>
     </div>
   )
 }

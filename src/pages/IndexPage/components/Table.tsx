@@ -1,24 +1,20 @@
 import useTable from "./useTable";
 
-import { PlanModel } from "../../../models/PlanModel";
 import TableBody from "../../../shared/TableBody/TableBody";
 import TableFilter from "../../../shared/TableFilter/TableFilter";
 import TableHeader from "../../../shared/TableHeader/TableHeader";
-import HeaderInfo from "../../../shared/Tables/Interfaces/FieldInfo";
 import { TableActions } from "../../../models/TableActions";
 
 import "./table.css"
-import { Link } from "react-router-dom";
-
-interface Props {
-    headerData: Array<HeaderInfo>,
-    mockData: Array<PlanModel>
-    filters?: boolean
-}
-
-const Table = ({ headerData, filters }: Props) => {
+import FieldInfo from "../../../shared/Tables/Interfaces/FieldInfo";
+import HeaderData from '../HeaderData.json'
+const Table = ({setCount}:{setCount: Function}) => {
 
     const { tableData, changeOrderer, changeFilterer, handleAction } = useTable();
+
+    setCount(tableData.length)
+
+    const headerData: Array<FieldInfo> = HeaderData
 
     const actions: Array<TableActions> = [
         {
@@ -33,17 +29,13 @@ const Table = ({ headerData, filters }: Props) => {
 
     return (
         <>
-            <div className="index__heading">
-                <button><Link to={"/create"}>Create Plan</Link></button>
-                <div className="table__count">Currently showing: <span>{tableData.length}</span> plan{tableData.length !== 1 && "s"}</div>
-            </div>
             <section className='table__container index'>
 
                 <div className="table table_plan" id="tablePlan">
                     <TableHeader headerData={headerData} changeOrderer={changeOrderer} />
-                    {
-                        filters && <TableFilter headerData={headerData} changeFilterer={changeFilterer} />
-                    }
+                   
+                        <TableFilter headerData={headerData} changeFilterer={changeFilterer} />
+                   
                     <TableBody tableData={tableData} actions={actions} />
                 </div>
             </section>

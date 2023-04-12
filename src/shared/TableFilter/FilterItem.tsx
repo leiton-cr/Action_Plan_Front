@@ -21,7 +21,7 @@ const FilterItem = ({title, changeFilterer }: Props) => {
   return (
     <div className="table_head__cell">
 
-      <input onChange={onFilter} value={filter}></input>
+      <input autoComplete="false" onChange={onFilter} value={filter}></input>
 
     </div>
 

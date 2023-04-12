@@ -1,3 +1,5 @@
+import { PlanDetail } from "./PlanDetail"
+
 export interface PlanModel {
     id: string
     project: string
@@ -6,5 +8,6 @@ export interface PlanModel {
     outcome?: string
     goal?: string
     issue?: string
-    updatedAt: string
+    details?:Array<PlanDetail>
+    updateAt: string
 }

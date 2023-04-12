@@ -4,10 +4,11 @@ import { PlanModel } from "../../../models/PlanModel";
 import useAlerts from "../../../hooks/useAlerts";
 import { useNavigate } from "react-router-dom";
 import usePlanService from "../../../services/usePlanService";
+import { findCompany, findPerson } from "../../../utils/helpers";
 
 const useTable = () => {
-
-    const { promiseAlert } = useAlerts()
+    const { deleteOne } = usePlanService()
+    const { toastAlert, promiseAlert } = useAlerts()
 
     const [activeOrderer, setActiveOrderer] = useState({ orderer: "id", isAsc: false });
     const [tableData, setTableData] = useState([])
@@ -15,7 +16,7 @@ const useTable = () => {
         project: "",
         manager: "",
         company: "",
-        updatedAt: ""
+        updateAt: ""
     })
 
     const navigate = useNavigate()
@@ -55,7 +56,6 @@ const useTable = () => {
         navigate(`/edit/${id}`)
     }
 
-
     const handleDelete = (id: string) => {
         promiseAlert("Are you sure?", "This action is irreversible.")
             .then(({ isConfirmed }) => {
@@ -68,19 +68,22 @@ const useTable = () => {
 
     const processDelete = (id) => {
         let newStates = tableData
-        newStates = newStates.filter((state: PlanModel) => state.id !== id)
 
-        setTableData([...newStates])
+        deleteOne(id).then((data => {
+            console.log(data);
+
+            toastAlert("Successfully deleted", "success")
+
+            newStates = newStates.filter((state: PlanModel) => state.id !== id)
+            mockData.current = newStates
+            setTableData([...newStates])
+        }))
+
     }
 
     const { getAll } = usePlanService()
 
-    useEffect(() => {
-        getAll().then((res) => {
-            mockData.current = res.data
-            setTableData(res.data)
-        })
-    }, [])
+  
 
     useEffect(() => {
 
@@ -95,20 +98,33 @@ const useTable = () => {
         }
         )
 
-
         Object.keys(filters).map((key: string) => {
 
-            const filter = filters[key as MainColumnNames].trim().toLowerCase()
+            const filter = filters[key as MainColumnNames].toLowerCase()
 
             filteredTable = filteredTable.filter((item: PlanModel) => {
-                if (filter.trim().length === 0) return true
-                const data = item[key].trim().toLowerCase()
+
+                if (!item[key] || filter.trim().length === 0) return true
+
+                let data = (item[key]).toString()
+
+                switch (key) {
+                    case "manager":
+                        data = findPerson(data) || ""
+                        break;
+                    case "company":
+                        data = findCompany(data) || ""
+                        break;
+                }
+
+                data = data.trim().toLowerCase()
+                console.log(data);
 
                 return data.includes(filter)
 
             }
             )
-
+           
         })
 
         setTableData(filteredTable)
@@ -119,6 +135,19 @@ const useTable = () => {
         setTableData(mockData.current)
     }, [mockData])
 
+    useEffect(() => {
+        getAll().then((res) => {
+    
+            if (typeof(res.data) == "string"){
+                toastAlert("Can't connect to the server.", "error")
+                mockData.current = []
+                return setTableData([])
+            };
+            
+            mockData.current = res.data
+            setTableData(res.data)
+        })
+    }, [])
 
     return { tableData, changeOrderer, changeFilterer, handleAction }
 }

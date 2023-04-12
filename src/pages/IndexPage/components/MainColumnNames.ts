@@ -1,1 +1,1 @@
-export type MainColumnNames = "project" | "manager" | "company" | "updatedAt" 
+export type MainColumnNames = "project" | "manager" | "company" | "updateAt" 

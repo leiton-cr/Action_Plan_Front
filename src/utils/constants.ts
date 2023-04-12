@@ -78,7 +78,7 @@ export const EMPTY_HEADER: PlanModel = {
     "company": "",
     "project": "",
     "manager": "",
-    "updatedAt": "",
+    "updateAt": "",
     "outcome": "",
     "goal": "",
     "issue": "",

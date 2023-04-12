@@ -18,7 +18,6 @@ const DetailsPage = () => {
       
         <div className={changes ? "": "transparent"}>Changes pending to be saved.</div>
       
-
         <div className='details__buttons'>
           <button  onClick={handleCancel}>Cancel</button>
           <button onClick={handleSave}>Save</button>

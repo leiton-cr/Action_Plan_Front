@@ -1,7 +1,6 @@
 
 
 import { TableActions } from '../../models/TableActions'
-import ActionButton from '../Buttons/ActionSelect'
 import { PlanDetail } from '../../models/PlanDetail'
 import { PlanModel } from '../../models/PlanModel'
 import TableItem from './TableItem'
@@ -36,13 +35,13 @@ const TableRow = ({ content, actions, handler }: Props) => {
 
             <TableItem title={"id"} type={INPUT_MAPPER["id"].type} content={content["id"]} handler={handler} value={content["id"]} />
 
-            <div className="table_body__cell">
-
+            {
+                actions && actions?.length > 0 && <div className="table_body__cell">
                 {
                     actions && <ActionSelect id={content.id} actions={actions} ></ActionSelect>
                 }
-
             </div>
+            }
 
             {
                 Object.keys(content).map((key: string, i: number) => {

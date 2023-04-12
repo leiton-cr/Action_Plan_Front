@@ -3,8 +3,6 @@ import { v4 as uuid } from 'uuid';
 import { COMPANY, EMPTY_DETAIL, PEOPLE, PRIORITY, ROL, STATUS } from './constants';
 
 
-
-
 export const createEmptyLine = () => {
   return { ...EMPTY_DETAIL, id: uuid() }
 }
@@ -57,4 +55,12 @@ export const generateSelectOptions = (title:String) => {
 
 export const parseDate = (date:string) => {
   return date.substring(0,10)
+}
+
+export const findPerson = (code) => {
+  return PEOPLE.find(person => person.CODE == code)?.TITLE
+}
+
+export const findCompany = (code) => {
+  return Object.values(COMPANY).find(company => company.CODE == code)?.TITLE
 }

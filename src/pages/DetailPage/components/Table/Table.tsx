@@ -1,5 +1,4 @@
 
-
 import useTable from "./useTable";
 
 import "./table.css"
